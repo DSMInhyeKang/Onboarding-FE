@@ -123,19 +123,13 @@ export function ChatBot({ isOpen, onClose }: ChatBotProps) {
 
   return (
     <>
-      {!isMinimized && (
-        <div 
-          className="fixed inset-0 bg-background/20 backdrop-blur-sm z-40 animate-fade-in"
-          onClick={onClose}
-        />
-      )}
-
       {/* Chat Window */}
       <div className={`fixed z-50 glass-strong flex flex-col transition-all duration-500 ease-out ${
         isMinimized 
-          ? 'bottom-4 right-4 w-80 h-16 rounded-2xl'
-          : 'bottom-4 right-4 w-[420px] h-[650px] rounded-3xl animate-scale-in'
-      } max-h-[calc(100vh-2rem)] shadow-2xl`}>
+          ? 'bottom-6 right-6 w-80 h-16 rounded-2xl' 
+          : 'bottom-6 right-6 w-[420px] h-[650px] rounded-3xl animate-scale-in'
+      } max-h-[calc(100vh-2rem)] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] border border-slate-200/60`}>
+        
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/30 bg-gradient-to-r from-primary/10 via-accent/5 to-transparent rounded-t-3xl">
           <div className="flex items-center gap-3">
