@@ -8,7 +8,8 @@ import { MemberManagement } from '@/components/dashboard/member-management'
 import { DeadlineAlerts } from '@/components/dashboard/deadline-alerts'
 import { DocumentForms } from '@/components/dashboard/document-forms'
 import { ChatBot } from '@/components/dashboard/chatbot'
-import type { TabType } from '@/lib/types'
+
+export type TabType = 'overview' | 'members' | 'deadlines' | 'documents'
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<TabType>('overview')
@@ -33,7 +34,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-background flex">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       
-      <div className={`flex-1 flex flex-col min-h-screen ${isChatOpen ? 'filter blur-sm' : ''}`}>
+      <div className="flex-1 flex flex-col min-h-screen">
         <Header onChatOpen={() => setIsChatOpen(true)} />
         
         <main className="flex-1 p-6 overflow-auto">

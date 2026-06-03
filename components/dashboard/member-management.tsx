@@ -31,27 +31,32 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Search, Plus, Edit2, Trash2, Filter, Download, ChevronLeft, ChevronRight, Users } from 'lucide-react'
+import { SubscriberDetailModal, SubscriberDetail } from './subscriber-detail-modal'
 
 interface Member {
   id: string
   employeeId: string
   name: string
   department: string
+  company: string
   joinDate: string
+  startDate?: string
+  terminationDate?: string
+  effectiveDate?: string
   type: 'DC' | 'DB'
   defaultOption: string
   balance: string
 }
 
 const initialMembers: Member[] = [
-  { id: '1', employeeId: 'E001', name: '홍길동', department: '영업팀', joinDate: '2020-03-15', type: 'DC', defaultOption: '설정완료', balance: '45,230,000' },
-  { id: '2', employeeId: 'E002', name: '김영희', department: '개발팀', joinDate: '2019-07-20', type: 'DC', defaultOption: '미설정', balance: '67,890,000' },
-  { id: '3', employeeId: 'E003', name: '이철수', department: '인사팀', joinDate: '2018-01-10', type: 'DB', defaultOption: '-', balance: '89,120,000' },
-  { id: '4', employeeId: 'E004', name: '박지민', department: '마케팅팀', joinDate: '2021-05-05', type: 'DC', defaultOption: '설정완료', balance: '23,450,000' },
-  { id: '5', employeeId: 'E005', name: '최수진', department: '재무팀', joinDate: '2017-09-12', type: 'DB', defaultOption: '-', balance: '112,340,000' },
-  { id: '6', employeeId: 'E006', name: '정민수', department: '영업팀', joinDate: '2022-02-28', type: 'DC', defaultOption: '미설정', balance: '15,670,000' },
-  { id: '7', employeeId: 'E007', name: '강하나', department: '개발팀', joinDate: '2020-11-15', type: 'DC', defaultOption: '설정완료', balance: '38,900,000' },
-  { id: '8', employeeId: 'E008', name: '윤서연', department: '인사팀', joinDate: '2019-04-22', type: 'DB', defaultOption: '-', balance: '72,100,000' },
+  { id: '1', employeeId: 'E001', name: '홍길동', department: '영업팀', company: '삼성전자(주)', joinDate: '2020-03-15', startDate: '2018-01-10', type: 'DC', defaultOption: '설정완료', balance: '45,230,000' },
+  { id: '2', employeeId: 'E002', name: '김영희', department: '개발팀', company: '삼성전자(주)', joinDate: '2019-07-20', startDate: '2017-05-15', type: 'DC', defaultOption: '미설정', balance: '67,890,000' },
+  { id: '3', employeeId: 'E003', name: '이철수', department: '인사팀', company: 'LG화학(주)', joinDate: '2018-01-10', startDate: '2015-03-02', type: 'DB', defaultOption: '-', balance: '89,120,000' },
+  { id: '4', employeeId: 'E004', name: '박지민', department: '마케팅팀', company: 'SK하이닉스(주)', joinDate: '2021-05-05', startDate: '2020-09-01', type: 'DC', defaultOption: '설정완료', balance: '23,450,000' },
+  { id: '5', employeeId: 'E005', name: '최수진', department: '재무팀', company: '현대자동차(주)', joinDate: '2017-09-12', startDate: '2012-06-15', terminationDate: '2026-12-31', type: 'DB', defaultOption: '-', balance: '112,340,000' },
+  { id: '6', employeeId: 'E006', name: '정민수', department: '영업팀', company: '두산중공업(주)', joinDate: '2022-02-28', startDate: '2021-08-01', type: 'DC', defaultOption: '미설정', balance: '15,670,000' },
+  { id: '7', employeeId: 'E007', name: '강하나', department: '개발팀', company: '포스코(주)', joinDate: '2020-11-15', startDate: '2019-03-10', type: 'DC', defaultOption: '설정완료', balance: '38,900,000' },
+  { id: '8', employeeId: 'E008', name: '윤서연', department: '인사팀', company: '현대모비스(주)', joinDate: '2019-04-22', startDate: '2016-11-01', type: 'DB', defaultOption: '-', balance: '72,100,000' },
 ]
 
 export function MemberManagement() {

@@ -1,7 +1,7 @@
 'use client'
 
 import { Building2, LayoutDashboard, Users, CalendarDays, FileText, LogOut, ChevronRight } from 'lucide-react'
-import type { TabType } from '@/lib/types'
+import { TabType } from '@/app/dashboard/page'
 
 interface SidebarProps {
   activeTab: TabType
