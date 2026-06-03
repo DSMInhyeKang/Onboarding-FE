@@ -129,7 +129,7 @@ export function Header({ onChatOpen }: HeaderProps) {
 
             {/* Notification Dropdown */}
             {isNotificationOpen && (
-              <div className="absolute right-0 top-full mt-2 w-96 glass-strong rounded-2xl shadow-2xl border border-white/30 overflow-hidden z-[70] animate-scale-in">
+              <div className="absolute right-0 top-full mt-2 w-96 bg-white/94 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 overflow-hidden z-50 animate-scale-in">
                 <div className="p-4 border-b border-white/30 flex items-center justify-between">
                   <h3 className="font-semibold text-foreground">알림</h3>
                   {unreadCount > 0 && (
