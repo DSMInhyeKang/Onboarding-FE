@@ -89,13 +89,6 @@ function Modal({ open, onClose, children }: { open: boolean; onClose: () => void
           background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,255,0.95) 100%)',
         }}
       >
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-all"
-          style={{ zIndex: 10001 }}
-        >
-          <X className="w-4 h-4" />
-        </button>
         {children}
       </div>
     </div>
@@ -117,13 +110,32 @@ function DetailModalContent({
   const getDays = () => {
     const today = new Date(); today.setHours(0, 0, 0, 0)
     const d = new Date(schedule.deadline)
-    return Math.ceil((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+    return Math.round((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
   }
   const days = getDays()
 
   const formatDate = (s: string) => {
     const d = new Date(s)
     return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`
+  }
+
+  const formatDateShort = (s: string) => {
+    const d = new Date(s)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  }
+
+  const getDeadlineText = () => {
+    if (schedule.status === '완료') return '처리 완료'
+    if (days < 0) return `${Math.abs(days)}일 초과`
+    if (days === 0) return '오늘 마감'
+    return `${days}일 전`
+  }
+
+  const getDeadlineColor = () => {
+    if (schedule.status === '완료') return 'text-emerald-600'
+    if (days < 0) return 'text-red-600'
+    if (days <= 14) return 'text-amber-600'
+    return 'text-blue-600'
   }
 
   // 연관 가입자 -> SubscriberDetail로 변환
@@ -149,53 +161,24 @@ function DetailModalContent({
 
   return (
     <div className="p-6">
-      <div className="flex items-start gap-4 pr-8 mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/25">
-          <Calendar className="w-6 h-6 text-white" />
+      <div className="flex items-start justify-between gap-4 mt-2 mb-6">
+        <div className="flex items-start gap-4 flex-1">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/25">
+            <Calendar className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-xl font-bold text-slate-900 leading-tight mb-0.5">{schedule.title}</h2>
+            <p className={`text-sm font-semibold ${getDeadlineColor()}`}>
+              기한: {formatDateShort(schedule.deadline)} ({getDeadlineText()})
+            </p>
+          </div>
         </div>
-        <div className="flex-1 min-w-0">
-          <h2 className="text-xl font-bold text-slate-900 leading-tight">{schedule.title}</h2>
+        <div className="flex items-center gap-2 text-xs text-slate-500 flex-shrink-0 mr-2">
+          등록: {formatDateShort(schedule.createdAt)}
         </div>
       </div>
 
       <div className="space-y-4">
-        {/* 기한 정보 */}
-        <div className="rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/60 p-5">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <Calendar className="w-4 h-4 text-blue-600" />
-            </div>
-            <span className="text-sm font-bold text-slate-800">기한 정보</span>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-3 rounded-xl bg-white/80 border border-slate-100">
-              <p className="text-xs text-slate-500 mb-1">기한일</p>
-              <p className="text-sm font-bold text-slate-900">{formatDate(schedule.deadline)}</p>
-            </div>
-            <div className="p-3 rounded-xl bg-white/80 border border-slate-100">
-              <p className="text-xs text-slate-500 mb-1">남은 기간</p>
-              <p className={`text-sm font-bold ${
-                schedule.status === '완료' ? 'text-emerald-600' :
-                days < 0 ? 'text-red-600' :
-                days <= 14 ? 'text-amber-600' : 'text-blue-600'
-              }`}>
-                {schedule.status === '완료' ? '처리 완료' :
-                 days < 0 ? `${Math.abs(days)}일 초과` :
-                 days === 0 ? '오늘 마감' : `D-${days}`}
-              </p>
-            </div>
-            <div className="p-3 rounded-xl bg-white/80 border border-slate-100">
-              <p className="text-xs text-slate-500 mb-1">등록일</p>
-              <p className="text-sm text-slate-700">{formatDate(schedule.createdAt)}</p>
-            </div>
-            <div className="p-3 rounded-xl bg-white/80 border border-slate-100">
-              <p className="text-xs text-slate-500 mb-1">상태</p>
-              <p className={`text-sm font-medium ${
-                schedule.status === '완료' ? 'text-emerald-600' : 'text-amber-600'
-              }`}>{schedule.status}</p>
-            </div>
-          </div>
-        </div>
 
         {/* 일정 내용 */}
         <div className="rounded-2xl bg-gradient-to-br from-slate-50 to-indigo-50/30 border border-slate-200/60 p-5">
@@ -208,8 +191,8 @@ function DetailModalContent({
           <p className="text-sm text-slate-700 leading-relaxed bg-white/60 rounded-xl p-4 border border-slate-100">{schedule.content}</p>
         </div>
 
-        {/* 기업 대상 */}
-        {schedule.targetType === '기업' && schedule.relatedCompanies && schedule.relatedCompanies.length > 0 && (
+        {/* 기업 대상 - 가입자가 없을 때만 표시 */}
+        {schedule.targetType === '기업' && schedule.relatedCompanies && schedule.relatedCompanies.length > 0 && (!schedule.relatedSubscribers || schedule.relatedSubscribers.length === 0) && (
           <div className="rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/30 border border-slate-200/60 p-5">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
@@ -343,6 +326,17 @@ function AddModalContent({
   const handleSubmit = () => {
     if (!validate()) return
     const hasSubscriber = selectedSubscribers.length > 0
+    
+    // 가입자가 없을 경우 현재 기업 정보
+    const currentCompany = {
+      id: 'CURRENT-COMPANY',
+      name: 'IBK 퇴직연금',
+      businessNumber: '000-00-00000',
+      employeeCount: 0,
+      planType: 'DC' as const,
+      contractDate: new Date().toISOString().split('T')[0],
+    }
+    
     const newSchedule: DeadlineSchedule = {
       id: `DL-${Date.now()}`,
       title: form.title,
@@ -361,6 +355,7 @@ function AddModalContent({
         joinDate: m.joinDate,
         balance: parseInt(m.balance.replace(/,/g, '')) || 0,
       })) : undefined,
+      relatedCompanies: !hasSubscriber ? [currentCompany] : undefined,
     }
     onAdd(newSchedule)
     onClose()
@@ -382,7 +377,7 @@ function AddModalContent({
 
   return (
     <div className="p-6">
-      <div className="flex items-center gap-4 mb-6 pr-8">
+      <div className="flex items-center gap-4 mt-2 mb-6 pr-8">
         <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/25">
           <Plus className="w-6 h-6 text-white" />
         </div>
@@ -591,7 +586,7 @@ function CalendarView({
   const getDaysUntil = (deadline: string) => {
     const todayDate = new Date(); todayDate.setHours(0, 0, 0, 0)
     const d = new Date(deadline)
-    return Math.ceil((d.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24))
+    return Math.round((d.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24))
   }
 
   const getDateSchedules = (day: number) => {
@@ -836,7 +831,7 @@ export function DeadlineAlerts() {
   const getDaysUntil = (deadline: string) => {
     const today = new Date(); today.setHours(0, 0, 0, 0)
     const d = new Date(deadline)
-    return Math.ceil((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+    return Math.round((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
   }
 
   // 통계: 전체 / 기일임박(2주이내) / 초과 - 완료 제외
@@ -894,7 +889,7 @@ export function DeadlineAlerts() {
   // 날짜 포맷 (일자만)
   const formatDateShort = (dateStr: string) => {
     const d = new Date(dateStr)
-    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
   }
 
   return (
