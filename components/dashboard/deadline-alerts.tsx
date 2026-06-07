@@ -382,8 +382,8 @@ function AddModalContent({
           <Plus className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-slate-900">기일 일정 추가</h2>
-          <p className="text-sm text-slate-500 mt-0.5">새로운 기일 일정을 등록합니다</p>
+          <h2 className="text-xl font-bold text-slate-900">일정 추가</h2>
+          <p className="text-sm text-slate-500 mt-0.5">새로운 일정을 등록합니다</p>
         </div>
       </div>
 
@@ -730,7 +730,7 @@ function CalendarView({
               <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
                 <Calendar className="w-7 h-7 text-slate-300" />
               </div>
-              <p className="text-sm text-slate-400">이 날짜에 기일 일정이 없습니다.</p>
+              <p className="text-sm text-slate-400">이 날짜에 일정이 없습니다.</p>
               <button
                 onClick={() => setShowAddForDate(selectedDate)}
                 className="mt-3 text-sm text-blue-600 font-medium hover:underline"
@@ -904,8 +904,8 @@ export function DeadlineAlerts() {
             <Calendar className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-foreground">기일도래</h2>
-            <p className="text-sm text-muted-foreground">IBK 퇴직연금 관리시스템</p>
+            <h2 className="text-2xl font-bold text-foreground">기일 관리</h2>
+            <p className="text-sm text-muted-foreground">도래하는 퇴직연금 일정을 관리합니다.</p>
           </div>
         </div>
       </div>
@@ -1015,7 +1015,7 @@ export function DeadlineAlerts() {
               <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
                 <Calendar className="w-8 h-8 text-slate-300" />
               </div>
-              <p className="text-sm text-muted-foreground">조건에 맞는 기일 일정이 없습니다.</p>
+              <p className="text-sm text-muted-foreground">조건에 맞는 일정이 없습니다.</p>
             </div>
           ) : (
             filteredSchedules.map(schedule => {
